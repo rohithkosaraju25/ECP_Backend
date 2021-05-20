@@ -36,11 +36,15 @@ public class Complaint {
 	private LocalDate complaintRegDate;
 	@Column(name = "max_date_to_resolve")
 	private LocalDate maximumDateToResolve;
+	@Column(name = "replace_request_status")
+	private String replaceRequest;
 
 	public Complaint() {
 		super();
 	}
-
+	
+	
+	
 	public Complaint(int complaintId, String productModelNumber, String complaintName, String status, String clientId,
 			int engineerId, LocalDate complaintRegDate, LocalDate maximumDateToResolve) {
 		super();
@@ -54,69 +58,114 @@ public class Complaint {
 		this.maximumDateToResolve = maximumDateToResolve;
 	}
 
-	public long getComplaintId() {
+
+
+	public Complaint(int complaintId, String productModelNumber, String complaintName, String status, String clientId,
+			int engineerId, LocalDate complaintRegDate, LocalDate maximumDateToResolve, String replaceRequest) {
+		super();
+		this.complaintId = complaintId;
+		this.productModelNumber = productModelNumber;
+		this.complaintName = complaintName;
+		this.status = status;
+		this.clientId = clientId;
+		this.engineerId = engineerId;
+		this.complaintRegDate = complaintRegDate;
+		this.maximumDateToResolve = maximumDateToResolve;
+		this.replaceRequest = replaceRequest;
+	}
+	
+	
+
+
+	public int getComplaintId() {
 		return complaintId;
 	}
+
 
 	public void setComplaintId(int complaintId) {
 		this.complaintId = complaintId;
 	}
 
+
 	public String getProductModelNumber() {
 		return productModelNumber;
 	}
+
 
 	public void setProductModelNumber(String productModelNumber) {
 		this.productModelNumber = productModelNumber;
 	}
 
+
 	public String getComplaintName() {
 		return complaintName;
 	}
+
 
 	public void setComplaintName(String complaintName) {
 		this.complaintName = complaintName;
 	}
 
+
 	public String getStatus() {
 		return status;
 	}
+
 
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
+
 	public String getClientId() {
 		return clientId;
 	}
+
 
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
 
+
 	public int getEngineerId() {
 		return engineerId;
 	}
+
 
 	public void setEngineerId(int engineerId) {
 		this.engineerId = engineerId;
 	}
 
+
 	public LocalDate getComplaintRegDate() {
 		return complaintRegDate;
 	}
+
 
 	public void setComplaintRegDate(LocalDate complaintRegDate) {
 		this.complaintRegDate = complaintRegDate;
 	}
 
+
 	public LocalDate getMaximumDateToResolve() {
 		return maximumDateToResolve;
 	}
 
+
 	public void setMaximumDateToResolve(LocalDate maximumDateToResolve) {
 		this.maximumDateToResolve = maximumDateToResolve;
 	}
+
+
+	public String getReplaceRequest() {
+		return replaceRequest;
+	}
+
+
+	public void setReplaceRequest(String replaceRequest) {
+		this.replaceRequest = replaceRequest;
+	}
+
 
 	@Override
 	public String toString() {

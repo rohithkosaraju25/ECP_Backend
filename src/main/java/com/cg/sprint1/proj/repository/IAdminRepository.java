@@ -47,5 +47,14 @@ public interface IAdminRepository extends JpaRepository<Admin, Integer> {
 	
 	@Query("SELECT e from Engineer e WHERE e.engineerId = ?1")
 	public Optional<Engineer> getEngineerDomainById(int engineerId);
+	
+	@Query("SELECT c From Complaint c WHERE c.replaceRequest = 'REQUESTED' ")
+	public List<Complaint> getComplaintsByRequestStatus();
+	
+	@Modifying
+	@Query("UPDATE Complaint c SET c.replaceRequest = :replaceRequest WHERE c.complaintId = :complaintId ")
+	public int setComplaintRequestStatus(@Param("complaintId") int complaintId, @Param("replaceRequest") String replaceRequest);
+	
+	
 
 }

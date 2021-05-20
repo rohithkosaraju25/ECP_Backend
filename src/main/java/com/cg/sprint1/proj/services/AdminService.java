@@ -99,6 +99,7 @@ public class AdminService implements IAdminService {
 			List<Engineer> engineerList = adminDao.getEngineersByDomain(engineer.get().getDomain());
 			int engineerId = genEngineerId(engineerList, givenEngineerId);
 			int i = adminDao.replaceEngineerFromComplaint(engineerId, complaintId);
+			setComplaintRequestStatus(complaintId);
 			if (i == 1)
 				methodCheck = true;
 		} else {
@@ -125,6 +126,24 @@ public class AdminService implements IAdminService {
 		} while (engineerList.get(randomNumber).getEngineerId() == engineerId);
 
 		return engineerList.get(randomNumber).getEngineerId();
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Complaint> getComplaintsByRequestStatus() {
+		return adminDao.getComplaintsByRequestStatus();
+	}
+	
+	@Override
+	@Transactional
+	public void setComplaintRequestStatus(int complaintId) {
+		 adminDao.setComplaintRequestStatus(complaintId,"APPROVED");
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Complaint getComplaintByComplaintId(int complaintId) {
+		return adminDao.getComplaintByComplaintId(complaintId).get();
 	}
 
 }

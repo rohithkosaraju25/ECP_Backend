@@ -38,12 +38,12 @@ public class ClientController {
 		return new ResponseEntity<String>(" *** CLIENT ADDED SUCCESSFULLY *** ",HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/{clientId}", produces = "application/json")
-	public ResponseEntity<Optional<Client>> getClientByCLientId(@PathVariable("clientId") String clientId) throws InvalidClientIdException {
+	@GetMapping(value = "/details/clientId/{clientId}", produces = "application/json")
+	public ResponseEntity<Client> getClientByCLientId(@PathVariable("clientId") String clientId) throws InvalidClientIdException {
 		Optional<Client> c = null;
 		c = clientservice.getClientByCLientId(clientId);
 		if(c.isPresent()) {
-			return new ResponseEntity<Optional<Client>>(clientservice.getClientByCLientId(clientId),HttpStatus.OK);
+			return new ResponseEntity<Client>(clientservice.getClientByCLientId(clientId).get(),HttpStatus.OK);
 		}
 		else {
 			throw new InvalidClientIdException("!!! Given ClientId is invalid !!!");

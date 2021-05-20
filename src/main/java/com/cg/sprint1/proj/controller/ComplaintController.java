@@ -64,6 +64,11 @@ public class ComplaintController {
 		}
 		return new ResponseEntity<Complaint>(myComplaint, HttpStatus.OK);
 	}
+	
+	@PutMapping (value = "/requestStatus/{complaintId}")
+	public ResponseEntity<Complaint> requestForReplacementOfEngineer(@PathVariable("complaintId") int complaintId){
+		return new ResponseEntity<Complaint>(complaintService.requestForReplacementOfEngineer(complaintId),HttpStatus.OK);
+	}
 
 	@GetMapping(value = "/client/{clientId}", produces = "application/json")
 	public ResponseEntity<List<Complaint>> getClientAllComplaints(@PathVariable("clientId") String clientId) {
@@ -76,9 +81,28 @@ public class ComplaintController {
 				HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/requested/replacement/client/{clientId}", produces = "application/json")
+	public ResponseEntity<List<Complaint>> getClientRequestedForReplacementComplaints(@PathVariable("clientId") String clientId) {
+		return new ResponseEntity<List<Complaint>>(complaintService.getClientRequestedForReplacementComplaints(clientId),
+				HttpStatus.OK);
+	}
+	
+	
 	@GetMapping(value = "/active/client/{clientId}", produces = "application/json")
 	public ResponseEntity<List<Complaint>> getClientActiveComplaints(@PathVariable("clientId") String clientId) {
 		return new ResponseEntity<List<Complaint>>(complaintService.getClientActiveComplaints(clientId),
+				HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/onGoing/client/{clientId}", produces = "application/json")
+	public ResponseEntity<List<Complaint>> getClientOnGoingComplaints(@PathVariable("clientId") String clientId) {
+		return new ResponseEntity<List<Complaint>>(complaintService. getClientOnGoingComplaints(clientId),
+				HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/resolved/client/{clientId}", produces = "application/json")
+	public ResponseEntity<List<Complaint>> getClientResolvedComplaints(@PathVariable("clientId") String clientId) {
+		return new ResponseEntity<List<Complaint>>(complaintService.getClientResolvedComplaints(clientId),
 				HttpStatus.OK);
 	}
 

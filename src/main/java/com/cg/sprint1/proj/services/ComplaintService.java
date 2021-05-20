@@ -18,6 +18,7 @@ import com.cg.sprint1.proj.exceptions.InvalidClientIdException;
 import com.cg.sprint1.proj.exceptions.OutOfWarrantyException;
 import com.cg.sprint1.proj.exceptions.PermissionDeniedException;
 import com.cg.sprint1.proj.repository.IComplaintRepository;
+import com.cg.sprint1.proj.status.advice.ReplaceStatus;
 import com.cg.sprint1.proj.status.advice.Status;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,7 +50,7 @@ public class ComplaintService implements IComplaintService {
 					 complaintId = genComplaintId();
 					System.out.println("complaint done");
 					int i = complaintDao.bookComplaint(complaintId, productModelNumber, complaintName, "OPEN", clientId,
-							myEngineerId, complaintRegDate, maximumDateToResolve);
+							myEngineerId, complaintRegDate, maximumDateToResolve,"APPROVED");
 					if (i == 1)
 						methodCheck = true;
 				} else {
@@ -81,6 +82,14 @@ public class ComplaintService implements IComplaintService {
 		}
 		Optional<Complaint> mycomplaint = getComplaintByComplaintId(complaintId);
 		return mycomplaint.get();
+	}
+	
+	@Transactional
+	@Override
+	public Complaint requestForReplacementOfEngineer(int complaintId) {
+		 complaintDao.requestForReplacementOfEngineer(complaintId,"REQUESTED");
+		Complaint myComplaint = complaintDao.getComplaintByComplaintId(complaintId).get();
+		 return myComplaint;
 	}
 
 	@Transactional(readOnly = true)
@@ -121,6 +130,22 @@ public class ComplaintService implements IComplaintService {
 		} else {
 			throw new InValidComplaintIdException("!!!  Invalid Complaint ID !!!");
 		}
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public List<Complaint> getClientRequestedForReplacementComplaints(String clientId){
+		return complaintDao.getClientRequestedForReplacementComplaints(clientId, "REQUESTED");
+	}
+	@Transactional(readOnly = true)
+	@Override
+	public List<Complaint> getClientOnGoingComplaints(String clientId){
+		return complaintDao.getClientOnGoingComplaints(clientId);
+	}
+	@Transactional(readOnly = true)
+	@Override
+	public List<Complaint> getClientResolvedComplaints(String clientId){
+		return complaintDao.getClientResolvedComplaints(clientId);
 	}
 
 	public Optional<Complaint> getComplaintByComplaintId(int complaintId) {

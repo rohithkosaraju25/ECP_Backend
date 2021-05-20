@@ -88,17 +88,25 @@ public class AdminController {
 				HttpStatus.OK);
 	}
 	
-	@PutMapping(value = "/replace",consumes = "application/json") // extracting product category
-	public ResponseEntity<String> replaceEngineerFromComplaint(@RequestParam int complaintId) throws InValidDomainException, InValidComplaintIdException{
+	@PutMapping(value = "/replace/engineer/complaintId/{complaintId}") // extracting product category
+	public ResponseEntity<Complaint> replaceEngineerFromComplaint(@PathVariable int complaintId) throws InValidDomainException, InValidComplaintIdException{
+		int id = Integer.valueOf(complaintId);
+		Complaint myComplaint = null;
 		try {
-			adminservice.replaceEngineerFromComplaint(complaintId);
+			adminservice.replaceEngineerFromComplaint(id);
+			myComplaint=adminservice.getComplaintByComplaintId(id);
 		} catch (InValidDomainException e) {
 			throw new InValidDomainException(" !!! Invalid Domain Provided !!! ");
 		}
 		catch (InValidComplaintIdException e){
 			throw new InValidComplaintIdException(" !!! Invalid Complaint ID Provided !!! ");
 		}
-		return new ResponseEntity<String>(" *** ENGINEER REPLACED SUCCESSFULLY *** ",HttpStatus.OK);
+		return new ResponseEntity<Complaint>(myComplaint,HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/requestedForReplacement", produces = "application/json")
+	public ResponseEntity<List<Complaint>> getComplaintsByRequestStatus(){
+		return new ResponseEntity<List<Complaint>>(adminservice.getComplaintsByRequestStatus(),HttpStatus.OK);
 	}
 
 }

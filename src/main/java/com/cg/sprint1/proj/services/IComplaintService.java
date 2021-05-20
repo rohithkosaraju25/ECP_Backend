@@ -16,12 +16,20 @@ public interface IComplaintService {
 			throws OutOfWarrantyException, InvalidClientIdException, InValidModelNumberException;
 
 	public Complaint changeComplaintStatus(int complaintId, String status) throws PermissionDeniedException;
+	
+	public Complaint requestForReplacementOfEngineer(int complaintId);
+	
+	public List<Complaint> getClientRequestedForReplacementComplaints(String clientId);
 
 	public List<Complaint> getClientAllComplaints(String clientId);
 
 	public List<Complaint> getClientAllOpenComplaints(String clientId);
 	
 	public List<Complaint> getClientActiveComplaints(String clientId);
+	
+	public List<Complaint> getClientOnGoingComplaints(String clientId);
+	
+	public List<Complaint> getClientResolvedComplaints(String clientId);
 
 	public Engineer getEngineerByComplaintId(int complaintId) throws InValidComplaintIdException;
 

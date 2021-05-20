@@ -14,12 +14,19 @@ import com.cg.sprint1.proj.exceptions.*;
 public interface IComplaintRepository extends JpaRepository<Complaint, Integer>{
 	
 	@Modifying																																				
-	@Query(value = "Insert into Complaint (complaint_id,product_model_number,complaint_name,complaint_status,client_id,engineer_id,complaint_regsitration_date,max_date_to_resolve) VALUES(?1,?2,?3,?4,?5,?6,?7,?8)",nativeQuery = true)
-	public int bookComplaint(int complaintId,String productModelNumber,String complaintName,String complaintStatus, String clientId, int engineerId, LocalDate complaintRegsitration_date,LocalDate maxDateToResolve)throws OutOfWarrantyException,InvalidClientIdException;
+	@Query(value = "Insert into Complaint (complaint_id,product_model_number,complaint_name,complaint_status,client_id,engineer_id,complaint_regsitration_date,max_date_to_resolve,replace_request_status) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9)",nativeQuery = true)
+	public int bookComplaint(int complaintId,String productModelNumber,String complaintName,String complaintStatus, String clientId, int engineerId, LocalDate complaintRegsitration_date,LocalDate maxDateToResolve,String replaceRequest)throws OutOfWarrantyException,InvalidClientIdException;
 	
 	@Modifying
 	@Query("UPDATE Complaint c SET c.status =:status WHERE c.complaintId = :complaintId") 
 	public int changeComplaintStatus(@Param("complaintId") int complaintId,@Param("status") String status) throws PermissionDeniedException;
+	
+	@Modifying
+	@Query("UPDATE Complaint c SET c.replaceRequest =:replaceRequest WHERE c.complaintId = :complaintId")
+	public int requestForReplacementOfEngineer(@Param("complaintId") int complaintId,@Param("replaceRequest") String replaceRequest);
+	
+	@Query("SELECT c From Complaint c WHERE c.clientId = :clientId AND c.replaceRequest = :replaceRequest ")
+	public List<Complaint> getClientRequestedForReplacementComplaints(@Param("clientId") String clientId,@Param("replaceRequest") String replaceRequest);
 	
 	@Query(value=" SELECT c.* From Complaint c INNER JOIN Client cl ON (c.client_id = cl.client_id) WHERE c.client_id = :clientId",nativeQuery=true)
 	public List<Complaint> getClientAllComplaints(@Param("clientId") String clientId); 
@@ -29,6 +36,12 @@ public interface IComplaintRepository extends JpaRepository<Complaint, Integer>{
 	
 	@Query("SELECT c FROM Complaint c INNER JOIN Client cl ON(c.clientId = cl.clientId) WHERE (c.status = 'OPEN' OR c.status='RESOLVE ONLINE' OR c.status='RESOLVE AFTER HOME VISIT' OR c.status='RESOLVED')AND c.clientId = :clientId ")
 	public List<Complaint> getClientActiveComplaints(@Param("clientId") String clientId);
+	
+	@Query("SELECT c FROM Complaint c INNER JOIN Client cl ON(c.clientId = cl.clientId) WHERE (c.status='RESOLVE ONLINE' OR c.status='RESOLVE AFTER HOME VISIT' OR c.status='RESOLVED')AND c.clientId = :clientId ")
+	public List<Complaint> getClientOnGoingComplaints(@Param("clientId") String clientId);
+	
+	@Query("SELECT c FROM Complaint c INNER JOIN Client cl ON(c.clientId = cl.clientId) WHERE  c.status='RESOLVED' AND c.clientId = :clientId ")
+	public List<Complaint> getClientResolvedComplaints(@Param("clientId") String clientId);
 	 
 	@Query("SELECT e FROM Engineer e INNER JOIN Complaint c ON(e.engineerId = c.engineerId) WHERE c.complaintId = :complaintId")
 	public Engineer getEngineerByComplaintId(@Param("complaintId") int complaintId)throws InValidComplaintIdException; 
